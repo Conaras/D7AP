@@ -1,0 +1,47 @@
+#include "mbed.h"
+
+Serial pc(PA_2, PA_3, 9600);
+
+AnalogIn av0(A0);
+AnalogIn av1(A1);
+AnalogIn av2(A2);
+DigitalOut led(LED1);
+DigitalOut d2(D2);
+DigitalOut d4(D4);
+int main() {
+    float meas0,meas1,meas2;
+    
+    printf("\nAnalogIn example\n");    
+    while(1) {
+        
+        meas0 = av0.read(); // Converts and read the analog input value (value from 0.0 to 1.0)
+        meas1 = av1.read();
+        meas2 = av2.read();
+      
+        meas0 = meas0 * 3300; // Change the value to be in the 0 to 3300 range
+        meas1 = meas1 * 3300;
+        meas2 = meas2 * 3300;
+        pc.printf("Measure of Sensor 1 = %.0f mV\n", meas0);
+        pc.printf("Measure of Sensor 2 = %.0f mV\n", meas1);
+        pc.printf("Measure of Sensor 3 = %.0f mV\n", meas2);
+        if (meas0 > 2000) { // If the value is greater than 2V then switch the LED on
+          led = 1;
+        }
+        else {
+          led = 0;
+        }
+        if (meas1 > 2000) { // If the value is greater than 2V then switch the LED on
+          d2 = 0;
+        }
+        else {
+          d2 = 1;
+        }
+        if (meas2 > 2000) { // If the value is greater than 2V then switch the LED on
+          d4=0;
+        }
+        else {
+          d4= 1;
+        }
+        wait(1); // 200 ms
+    }
+}
